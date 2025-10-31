@@ -1222,7 +1222,9 @@ target_link_libraries(freertos_kernel_port_headers
 )
 
 if(FREERTOS_PORT STREQUAL GCC_POSIX)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads REQUIRED)
+    target_link_libraries(freertos_kernel_port PUBLIC Threads::Threads)
 endif()
 
 target_link_libraries(freertos_kernel_port
