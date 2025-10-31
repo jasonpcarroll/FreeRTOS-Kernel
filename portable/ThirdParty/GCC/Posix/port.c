@@ -66,7 +66,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
-#include <sys/times.h>
+#ifndef NO_SYS_TIMES
+    #include <sys/times.h>
+#endif
 #include <time.h>
 #include <unistd.h>
 
@@ -671,10 +673,14 @@ static void prvSetupSignalsAndSchedulerPolicy( void )
 
 uint32_t ulPortGetRunTime( void )
 {
-    struct tms xTimes;
+    #ifndef NO_SYS_TIMES
+        struct tms xTimes;
 
-    times( &xTimes );
+        times( &xTimes );
 
-    return ( uint32_t ) xTimes.tms_utime;
+        return ( uint32_t ) xTimes.tms_utime;
+    #else
+        return 0;
+    #endif
 }
 /*-----------------------------------------------------------*/
